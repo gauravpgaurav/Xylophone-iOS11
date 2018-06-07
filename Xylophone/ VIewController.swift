@@ -9,10 +9,10 @@
 import UIKit
 import AVFoundation
 
-class ViewController: UIViewController{
+class ViewController: UIViewController, AVAudioPlayerDelegate{
     
-    
-    var audioPlayer: AVAudioPlayer?
+    var audioPlayer: AVAudioPlayer!
+    var soundArray = ["note1", "note2", "note3", "note4", "note5", "note6", "note7"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,18 +20,17 @@ class ViewController: UIViewController{
 
     @IBAction func notePressed(_ sender: UIButton) {
         let tagNumber = sender.tag
-        let path = Bundle.main.path(forResource: "note\(tagNumber).wav", ofType:nil)!
-        let url = URL(fileURLWithPath: path)
-        
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.play()
-        } catch {
-            // couldn't load file
-        }
+        playSound(soundFileName: soundArray[tagNumber-1])
     }
     
-  
-
+    func playSound(soundFileName: String){
+        let soundURL = Bundle.main.url(forResource: soundFileName, withExtension:"wav")
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: soundURL!)
+        }
+        catch {
+            print(error)
+        }
+        audioPlayer.play()
+    }
 }
-
